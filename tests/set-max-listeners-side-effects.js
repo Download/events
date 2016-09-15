@@ -26,7 +26,11 @@ var e = new events.EventEmitter;
 
 // Don't rely on private state in tests
 // assert.deepEqual(e._events, {});
+assert.deepEqual(e.listenerTypes(), []);
+assert(!e.listenerCount());
+
 e.setMaxListeners(5);
 // Don't rely on private state in tests
 // assert.deepEqual(e._events, {});
-
+assert.deepEqual(e.listenerTypes(), []);
+assert(!e.listenerCount());

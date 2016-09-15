@@ -1,5 +1,3 @@
-require('./legacy-compat');
-
 // set up a custom picolog instance so we can read out what the module has logged
 var log = require('picolog'), warn = log.warn
 log.warn = function() {
@@ -10,7 +8,8 @@ log.warn = function() {
 log.reset = function() {
 	delete log.lastWarning
 }
-global.uevents = {log:log}
+require('../').setLogger(log)
+
 // for our convenience, make it global
 global.log = log
 // require('../') // make it pick up logger before mocha pollutes it
@@ -30,11 +29,11 @@ require('./listener-count.js');
 require('./listeners-side-effects.js');
 require('./listeners.js');
 require('./max-listeners.js');
+require('./logger.js');
 require('./modify-in-emit.js');
 require('./num-args.js');
 require('./once.js');
-// I don't see a way to make the below test independant of internal state...
-// require('./set-max-listeners-side-effects.js');
+require('./set-max-listeners-side-effects.js');
 require('./subclass.js');
 require('./remove-all-listeners.js');
 require('./remove-listeners.js');

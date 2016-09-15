@@ -1,12 +1,16 @@
-module.exports = (function(global){// Copyright 2016 by Stijn de witt. Some rights reserved. License: CC-BY-4.0. Based on Node's `events` module. License: MIT
-
-function EventEmitter(obj) {
+// Copyright 2016 by Stijn de witt. Some rights reserved. License: CC-BY-4.0.
+// Based on Node's `events` module. License: MIT
+function EventEmitter(obj, options) {
+	// for backwards compat with `event`
 	if (!obj) {obj = (this instanceof EventEmitter ? this : {})}
-	return (function(_events, _maxListeners){
+	return (function(_events, _){
 
 		// public API
 		return Object.defineProperties(obj, {
 			setMaxListeners: {value: setMaxListeners},
+			maxListeners: {get:function(){return typeof _.maxListeners == 'undefined' ? EventEmitter.defaultMaxListeners : _.maxListeners}},
+			setLogger: {value: setLogger},
+			logger: {get:function(){return typeof _.logger == 'undefined' ? EventEmitter.logger : _.logger}},
 			emit: {value: emit},
 			on: {value: on},
 			once: {value: once},
@@ -15,6 +19,7 @@ function EventEmitter(obj) {
 			removeListener: {value: off},
 			removeAllListeners: {value: off},
 			listeners: {value: listeners},
+			listenerTypes: {value: listenerTypes},
 			listenerCount: {value: listenerCount},
 		})
 
@@ -23,7 +28,12 @@ function EventEmitter(obj) {
 		// Obviously not all Emitters should be limited to 10. This function allows
 		// that to be increased. Set to zero for unlimited.
 		function setMaxListeners(n) {
-			_maxListeners = n;
+			_.maxListeners = n;
+			return obj;
+		}
+
+		function setLogger(log) {
+			_.logger = log;
 			return obj;
 		}
 
@@ -50,11 +60,11 @@ function EventEmitter(obj) {
 			_events[type].push(fn);
 			// Check for listener leak
 			if (!_events[type].warned) {
-				var m = typeof _maxListeners == 'undefined' ? EventEmitter.defaultMaxListeners : _maxListeners
+				var m = obj.maxListeners
 				if (m && m > 0 && _events[type].length > m) {
 					_events[type].warned = true;
-					log && log.warn('Possible EventEmitter memory leak detected for \'%s\' event. %d listeners added. Use emitter.setMaxListeners() to increase limit.', type, _events[type].length)
-					log && log.trace && log.trace()
+					obj.logger.warn('Possible EventEmitter memory leak detected for \'%s\' event. %d listeners added. Use emitter.setMaxListeners() to increase limit.', type, _events[type].length)
+					obj.logger.trace && obj.logger.trace()
 				}
 			}
 			return obj;
@@ -101,17 +111,27 @@ function EventEmitter(obj) {
 			return _events[type] ? _events[type].slice() : []
 		}
 
-		function listenerCount(type) {
-			return _events[type] ? _events[type].length : 0
+		function listenerTypes() {
+			return Object.keys(_events)
 		}
-	})({})
+
+		function listenerCount(type) {
+			if (! type) {
+				var result = 0;
+				listenerTypes().forEach(function(x) {result += listenerCount(x)})
+				return result
+			}
+			if (typeof type == 'object' && type.length) {
+				return listenerTypes().map(function(x) {return listenerCount(x)})
+			}
+			return _events[type] && _events[type].length || 0
+		}
+	})({},{logger:options && options.logger, maxListeners: options && options.maxListeners})
 }
 
 EventEmitter.EventEmitter = EventEmitter
 EventEmitter.defaultMaxListeners = 10
-EventEmitter.listenerCount = function(obj, type){return obj.listenerCount(type)}
+EventEmitter.logger = typeof console == 'object' && console || {warn:function(){}}
+EventEmitter.setLogger = function setLogger(logger){EventEmitter.logger = logger}
 
-var log = global.uevents && global.uevents.log
-if (!log) try {log = require('picolog')} catch(e) {try {log=console} catch(e){}}
-
-return EventEmitter})((typeof global != 'undefined' && global) || (typeof window != undefined && window) || this)
+module.exports = EventEmitter

@@ -1,4 +1,4 @@
-# uevents <sup><sub>0.1.0</sub></sup>
+# uevents <sup><sub>0.5.0</sub></sup>
 
 ## Microscopically small, universal event emitter
 
@@ -37,6 +37,7 @@ Node's EventEmitter module is pretty good, but I would like it more if it:
 * Did not leak internal state
 * Did not depend on inheritance so much
 * Did not depend on `util` (which is pretty big)
+* Did not implement [deprecated methods](https://nodejs.org/api/events.html#events_eventemitter_listenercount_emitter_eventname)
 * Was microscopically small
 
 Hence this module. It's mostly compatible with the original and passes all
@@ -56,8 +57,10 @@ clean of that.
 
 For the most part, you can use Node's
 [documentation on `events`](http://nodejs.org/api/events.html) to get specifics
-on each function. Documented below you will find some examples where the differences
-with Node's `events` module are highlighted.
+on each function. Methods marked as *deprecated* are not implemented.
+
+Documented below you will find some examples where the differences with Node's
+`events` module are highlighted.
 
 ### Create a new emitter
 ```js
@@ -88,6 +91,55 @@ class MyClass {
 	}
 }
 ```
+### Get listener count
+```js
+emitter.on('test', function(){})
+emitter.listenerCount('test') // 1
+emitter.on('test', function(){})
+emitter.listenerCount('test') // 2
+// or (not implemented in `uevents`):
+// EventEmitter.listenerCount(emitter, 'test')
+// or (not implemented in `events`)
+emitter.on('wow', function(){})
+emitter.listenerCount() // 3  (sum of all listeners)
+// or (not implemented in `events`)
+emitter.listenerCount(['test', 'wow']) // [2,1]  (array with counts)
+```
+
+### Get listener types
+Strangely, this is not implemented in `events`, meaning you would need to
+resort to peeking at private state if you didn't know which event type to
+look for.
+```js
+emitter.listenerTypes() // ['test', 'wow']
+```
+
+### Get maxListeners
+Again strangely not implemented in `events`:
+```js
+emitter.maxListeners // no braces, it's an accessor property
+```
+
+### Set logger
+Just like `events`, `uevents` logs a warning when a suspected memory leak
+is detected. But unlike `events`, in `uevents` you can easily set a custom
+logger without having to overwrite the global `console`:
+
+```js
+// Set a custom logger for all emitters
+EventEmitter.setLogger({warn:function(){console.warn('minimal logger implementation')}})
+// Set a custom logger for a specific emitter
+emitter.setLogger(myLogger)
+// or at creation time
+const emitter = EventEmitter(undefined, {logger:myLogger})
+```
+
+## Get logger
+An accessor property, like `maxListeners`:
+```js
+emitter.logger // no braces
+```
+
 ### Listen for events
 ```js
 // same in `uevents` as in `events`
