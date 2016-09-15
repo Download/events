@@ -40,8 +40,10 @@ Node's EventEmitter module is pretty good, but I would like it more if it:
 * Was microscopically small
 
 Hence this module. It's mostly compatible with the original and passes all
-tests (though I had to make some modifications, see the diffs for more info).
-It ditches some legacy and some validation end the dependency on `util` so
+tests (though I had to make some modifications,
+see [the diffs](https://github.com/Download/uevents/commit/5183787756773699e92180018ece0d786bca1087)
+for more info).
+It ditches some legacy and some validation and the dependency on `util` so
 we end up with a lean library that doesn't bloat our web bundle.
 
 ## Usage ##
