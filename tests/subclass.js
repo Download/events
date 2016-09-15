@@ -21,15 +21,16 @@
 
 var assert = require('assert');
 var EventEmitter = require('../').EventEmitter;
-var util = require('util');
 
-util.inherits(MyEE, EventEmitter);
+// Be lean; don't require 'util'
+// var util = require('util');
+// util.inherits(MyEE, EventEmitter);
 
 function MyEE(cb) {
+  EventEmitter(this) // <-- isn't this much simpler?
   this.once(1, cb);
   this.emit(1);
   this.removeAllListeners();
-  EventEmitter.call(this);
 }
 
 var called = false;
@@ -38,8 +39,9 @@ var myee = new MyEE(function() {
 });
 
 
-util.inherits(ErrorEE, EventEmitter);
+// util.inherits(ErrorEE, EventEmitter);
 function ErrorEE() {
+  EventEmitter(this) // <-- isn't this much simpler?
   this.emit('error', new Error('blerg'));
 }
 
@@ -48,4 +50,7 @@ assert.throws(function() {
 }, /blerg/);
 
 assert(called);
-assert.deepEqual(myee._events, {});
+
+// Don't rely on private state in tests
+//assert.deepEqual(myee._events, {});
+assert(myee.listenerCount(1) === 0)

@@ -75,6 +75,6 @@ e2.on('bar', listener);
 e2.on('removeListener', expect(['foo', 'bar', 'removeListener']));
 e2.on('removeListener', expect(['foo', 'bar']));
 e2.removeAllListeners();
-console.error(e2);
+
 assert.deepEqual([], e2.listeners('foo'));
 assert.deepEqual([], e2.listeners('bar'));

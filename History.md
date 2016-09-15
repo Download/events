@@ -1,3 +1,11 @@
+# 0.1.0 (2016-09-16)
+
+Forked from `events`. Got rid of dependency on `util`. Slightly changed API to
+make it more functional and less dependant on inheritance. Changed implementation
+to not leak state. 
+
+# History from `events` up to the point of the fork
+
 # 1.1.1 (2016-06-22)
 
   - add more context to errors if they are not instanceof Error

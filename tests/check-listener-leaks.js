@@ -28,32 +28,49 @@ var e = new events.EventEmitter();
 for (var i = 0; i < 10; i++) {
   e.on('default', function() {});
 }
-assert.ok(!e._events['default'].hasOwnProperty('warned'));
+
+// Don't rely on private state in tests
+// assert.ok(!e._events['default'].hasOwnProperty('warned'));
+assert.ok(log.lastWarning === undefined)
 e.on('default', function() {});
-assert.ok(e._events['default'].warned);
+assert.ok(log.lastWarning !== undefined)
+log.reset()
 
 // specific
 e.setMaxListeners(5);
 for (var i = 0; i < 5; i++) {
   e.on('specific', function() {});
 }
-assert.ok(!e._events['specific'].hasOwnProperty('warned'));
+// Don't rely on private state in tests
+// assert.ok(!e._events['specific'].hasOwnProperty('warned'));
+assert.ok(log.lastWarning === undefined)
 e.on('specific', function() {});
-assert.ok(e._events['specific'].warned);
+// Don't rely on private state in tests
+// assert.ok(e._events['specific'].warned);
+assert.ok(log.lastWarning !== undefined)
+log.reset()
 
 // only one
 e.setMaxListeners(1);
 e.on('only one', function() {});
-assert.ok(!e._events['only one'].hasOwnProperty('warned'));
+// Don't rely on private state in tests
+// assert.ok(!e._events['only one'].hasOwnProperty('warned'));
+assert.ok(log.lastWarning === undefined)
 e.on('only one', function() {});
-assert.ok(e._events['only one'].hasOwnProperty('warned'));
+// Don't rely on private state in tests
+// assert.ok(e._events['only one'].hasOwnProperty('warned'));
+assert.ok(log.lastWarning !== undefined)
+log.reset()
 
 // unlimited
 e.setMaxListeners(0);
-for (var i = 0; i < 1000; i++) {
+// 50 is enough to prove the point. this test takes > 200ms with 1000 listeners
+for (var i = 0; i < 50; i++) {
   e.on('unlimited', function() {});
 }
-assert.ok(!e._events['unlimited'].hasOwnProperty('warned'));
+// Don't rely on private state in tests
+// assert.ok(!e._events['unlimited'].hasOwnProperty('warned'));
+assert.ok(log.lastWarning === undefined)
 
 // process-wide
 events.EventEmitter.defaultMaxListeners = 42;
@@ -62,25 +79,48 @@ e = new events.EventEmitter();
 for (var i = 0; i < 42; ++i) {
   e.on('fortytwo', function() {});
 }
-assert.ok(!e._events['fortytwo'].hasOwnProperty('warned'));
+// Don't rely on private state in tests
+// assert.ok(!e._events['fortytwo'].hasOwnProperty('warned'));
+assert.ok(log.lastWarning === undefined)
+
 e.on('fortytwo', function() {});
-assert.ok(e._events['fortytwo'].hasOwnProperty('warned'));
-delete e._events['fortytwo'].warned;
+// Don't rely on private state in tests
+// assert.ok(e._events['fortytwo'].hasOwnProperty('warned'));
+assert.ok(log.lastWarning !== undefined)
 
 events.EventEmitter.defaultMaxListeners = 44;
+
+// Don't rely on private state in tests
+// delete e._events['fortytwo'].warned;
+e.off('fortytwo')
+for (var i = 0; i < 43; ++i) {
+  e.on('fortytwo', function() {});
+}
+log.reset()
+
 e.on('fortytwo', function() {});
-assert.ok(!e._events['fortytwo'].hasOwnProperty('warned'));
+// Don't rely on private state in tests
+// assert.ok(!e._events['fortytwo'].hasOwnProperty('warned'));
+assert.ok(log.lastWarning === undefined)
 e.on('fortytwo', function() {});
-assert.ok(e._events['fortytwo'].hasOwnProperty('warned'));
+// Don't rely on private state in tests
+// assert.ok(e._events['fortytwo'].hasOwnProperty('warned'));
+assert.ok(log.lastWarning !== undefined)
+log.reset()
 
 // but _maxListeners still has precedence over defaultMaxListeners
 events.EventEmitter.defaultMaxListeners = 42;
 e = new events.EventEmitter();
 e.setMaxListeners(1);
 e.on('uno', function() {});
-assert.ok(!e._events['uno'].hasOwnProperty('warned'));
+// Don't rely on private state in tests
+// assert.ok(!e._events['uno'].hasOwnProperty('warned'));
+assert.ok(log.lastWarning === undefined)
 e.on('uno', function() {});
-assert.ok(e._events['uno'].hasOwnProperty('warned'));
+// Don't rely on private state in tests
+//assert.ok(e._events['uno'].hasOwnProperty('warned'));
+assert.ok(log.lastWarning !== undefined)
+log.reset()
 
 // chainable
 assert.strictEqual(e, e.setMaxListeners(1));

@@ -24,6 +24,9 @@ var events = require('../');
 
 var e = new events.EventEmitter;
 
-assert.deepEqual(e._events, {});
+// Don't rely on private state in tests
+// assert.deepEqual(e._events, {});
 e.setMaxListeners(5);
-assert.deepEqual(e._events, {});
+// Don't rely on private state in tests
+// assert.deepEqual(e._events, {});
+

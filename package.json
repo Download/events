@@ -1,33 +1,43 @@
 {
-  "name": "events",
-  "id": "events",
-  "version": "1.1.1",
-  "description": "Node's event emitter for all engines.",
+  "name": "uevents",
+  "id": "uevents",
+  "version": "0.1.0",
+  "description": "Microscopically small, universal event emitter.",
   "keywords": [
+		"universal-components",
     "events",
     "eventEmitter",
     "eventDispatcher",
-    "listeners"
+    "listeners",
+		"4kb",
+		"no-deps"
   ],
-  "author": "Irakli Gozalishvili <rfobic@gmail.com> (http://jeditoolkit.com)",
+  "author": "Stijn de Witt",
+	"website": "https://StijnDeWitt.com",
+	"contributors": [{
+		"name": "Irakli Gozalishvili",
+		"e-mail": "rfobic@gmail.com",
+		"website": "http://jeditoolkit.com"
+	}],
   "repository": {
     "type": "git",
-    "url": "git://github.com/Gozala/events.git",
-    "web": "https://github.com/Gozala/events"
+    "url": "git://github.com/Download/uevents.git",
+    "web": "https://github.com/Download/uevents"
   },
   "bugs": {
-    "url": "http://github.com/Gozala/events/issues/"
+    "url": "http://github.com/Download/uevents/issues/"
   },
-  "main": "./events.js",
+  "main": "./uevents.js",
   "engines": {
-    "node": ">=0.4.x"
+    "node": ">=4.x.x"
   },
   "devDependencies": {
     "mocha": "~1.21.4",
-    "zuul": "~1.10.2"
+    "picolog": "^1.0.4"
   },
   "scripts": {
-    "test": "mocha --ui qunit -- tests/index.js && zuul -- tests/index.js"
+    "test": "mocha --ui qunit -- tests/index.js"
   },
-  "license": "MIT"
+  "license": "CC-BY-4.0",
+	"license-events": "MIT"
 }
