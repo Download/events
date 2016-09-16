@@ -131,7 +131,7 @@ EventEmitter.setLogger({warn:function(){console.warn('minimal logger implementat
 // Set a custom logger for a specific emitter
 emitter.setLogger(myLogger)
 // or at creation time
-const emitter = EventEmitter(undefined, {logger:myLogger})
+const emitter = EventEmitter({}, {logger:myLogger})
 ```
 
 ## Get logger
