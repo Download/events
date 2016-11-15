@@ -1,6 +1,6 @@
-# uevents <sup><sub>0.5.0</sub></sup>
+# uevents <sup><sub>1.0.0</sub></sup>
 
-## Microscopically small, universal event emitter
+## Microscopically small universal event emitter
 
 [![npm](https://img.shields.io/npm/v/uevents.svg)](https://npmjs.com/package/uevents)
 [![license](https://img.shields.io/npm/l/uevents.svg)](https://creativecommons.org/licenses/by/4.0/)
@@ -9,6 +9,10 @@
 ![mind BLOWN](https://img.shields.io/badge/mind-BLOWN-ff69b4.svg)
 
 **Slim version of Node's event emitter for all modern engines.**
+
+This is a microscopically small (just over 1kB) version of Node's
+popular `events` module that has no dependencies and works in 
+Node and in the browser.
 
 ## Install ##
 

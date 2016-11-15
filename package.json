@@ -1,24 +1,26 @@
 {
   "name": "uevents",
   "id": "uevents",
-  "version": "0.5.0",
-  "description": "Microscopically small, universal event emitter.",
+  "version": "1.0.0",
+  "description": "Microscopically small universal event emitter",
   "keywords": [
-		"universal-components",
+    "universal-components",
     "events",
-    "eventEmitter",
-    "eventDispatcher",
+    "EventEmitter",
+    "event dispatcher",
     "listeners",
-		"4kb",
-		"no-deps"
+    "1kb",
+    "no-deps"
   ],
   "author": "Stijn de Witt",
-	"website": "https://StijnDeWitt.com",
-	"contributors": [{
-		"name": "Irakli Gozalishvili",
-		"e-mail": "rfobic@gmail.com",
-		"website": "http://jeditoolkit.com"
-	}],
+  "website": "https://StijnDeWitt.com",
+  "contributors": [
+    {
+      "name": "Irakli Gozalishvili",
+      "e-mail": "rfobic@gmail.com",
+      "website": "http://jeditoolkit.com"
+    }
+  ],
   "repository": {
     "type": "git",
     "url": "git://github.com/Download/uevents.git",
@@ -32,12 +34,12 @@
     "node": ">=4.x.x"
   },
   "devDependencies": {
-    "mocha": "~1.21.4",
+    "mocha": "^3.1.2",
     "picolog": "^1.0.4"
   },
   "scripts": {
     "test": "mocha --ui qunit -- tests/index.js"
   },
   "license": "CC-BY-4.0",
-	"license-events": "MIT"
+  "license-events": "MIT"
 }
