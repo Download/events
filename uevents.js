@@ -1,7 +1,7 @@
 // Copyright 2016 by Stijn de witt. Some rights reserved. License: CC-BY-4.0.
 // Based on Node's `events` module. License: MIT
 function EventEmitter(obj, options) {
-	// for backwards compat with `event`
+	// for back. compat. with `events`
 	if (!obj) {obj = (this instanceof EventEmitter ? this : {})}
 	return (function(_events, _){
 
@@ -116,15 +116,9 @@ function EventEmitter(obj, options) {
 		}
 
 		function listenerCount(type) {
-			if (! type) {
-				var result = 0;
-				listenerTypes().forEach(function(x) {result += listenerCount(x)})
-				return result
-			}
-			if (typeof type == 'object' && type.length) {
-				return listenerTypes().map(function(x) {return listenerCount(x)})
-			}
-			return _events[type] && _events[type].length || 0
+			return (type && type.map && type.map(function(x) {return listenerCount(x)})) ||
+					(!type && listenerTypes().reduce(function(prev, cur){return prev + _events[cur].length}, 0)) ||
+					(_events[type] && _events[type].length) || 0
 		}
 	})({},{logger:options && options.logger, maxListeners: options && options.maxListeners})
 }

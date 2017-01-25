@@ -1,7 +1,7 @@
 {
   "name": "uevents",
   "id": "uevents",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Microscopically small universal event emitter",
   "keywords": [
     "universal-components",

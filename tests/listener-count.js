@@ -31,7 +31,11 @@ emitter.on(123, function() {});
 
 // Don't implement deprecated stuff
 // assert.strictEqual(EventEmitter.listenerCount(emitter, 'foo'), 2);
+assert.strictEqual(emitter.listenerCount(), 4);
 assert.strictEqual(emitter.listenerCount('foo'), 2);
 assert.strictEqual(emitter.listenerCount('bar'), 0);
 assert.strictEqual(emitter.listenerCount('baz'), 1);
 assert.strictEqual(emitter.listenerCount(123), 1);
+assert.deepEqual(emitter.listenerCount(['foo', 'bar']), [2, 0]);
+assert.deepEqual(emitter.listenerCount(['foo', 'baz']), [2, 1]);
+assert.deepEqual(emitter.listenerCount([]), []);
