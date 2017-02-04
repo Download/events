@@ -1,5 +1,7 @@
 # uevents <sup><sub>1.0.0</sub></sup>
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/Download/uevents.svg)](https://greenkeeper.io/)
+
 ## Microscopically small universal event emitter
 
 [![npm](https://img.shields.io/npm/v/uevents.svg)](https://npmjs.com/package/uevents)
