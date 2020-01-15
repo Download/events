@@ -16,6 +16,8 @@ function EventEmitter(obj, options) {
 			once: {value: once},
 			off: {value: off},
 			addListener: {value: on},
+			prependListener: {value: prependListener},
+			prependOnceListener: {value: prependOnceListener},
 			removeListener: {value: off},
 			removeAllListeners: {value: off},
 			listeners: {value: listeners},
@@ -57,7 +59,7 @@ function EventEmitter(obj, options) {
 		function on(type, fn) {
 			if (_events.newListener) {obj.emit('newListener', type, fn)}
 			_events[type] = _events[type] || []
-			_events[type].push(fn);
+			_events[type][fn._prepend ? 'unshift': 'push'](fn);
 			// Check for listener leak
 			if (!_events[type].warned) {
 				var m = obj.maxListeners
@@ -73,6 +75,17 @@ function EventEmitter(obj, options) {
 		function once(type, fn) {
 			fn._once = 1
 			return obj.on(type, fn)
+		}
+
+		function prependListener(type, fn) {
+			fn._prepend = true;
+			return obj.on(type, fn);
+		}
+
+		function prependOnceListener(type, fn) {
+			fn._prepend = true;
+			fn._once = 1;
+			return obj.on(type, fn);
 		}
 
 		function off(type, fn) {
